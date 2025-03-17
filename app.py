@@ -4,7 +4,7 @@ import sys
 import boto3
 import streamlit as st
 
-## We will be suing Titan Embeddings Model To generate Embedding
+
 
 from langchain_community.embeddings import BedrockEmbeddings
 from langchain.llms.bedrock import Bedrock
@@ -33,14 +33,13 @@ def data_ingestion():
     loader=PyPDFDirectoryLoader("data")
     documents=loader.load()
 
-    # - in our testing Character split works better with this PDF data set
     text_splitter=RecursiveCharacterTextSplitter(chunk_size=10000,
                                                  chunk_overlap=1000)
     
     docs=text_splitter.split_documents(documents)
     return docs
 
-## Vector Embedding and vector store
+
 
 def get_vector_store(docs):
     vectorstore_faiss=FAISS.from_documents(
@@ -50,14 +49,14 @@ def get_vector_store(docs):
     vectorstore_faiss.save_local("faiss_index")
 
 def get_claude_llm():
-    ##create the Anthropic Model
+    
     llm=Bedrock(model_id="ai21.j2-mid-v1",client=bedrock,
                 model_kwargs={'maxTokens':512})
     
     return llm
 
 def get_llama2_llm():
-    ##create the Anthropic Model
+ 
     llm=Bedrock(model_id="meta.llama2-70b-chat-v1",client=bedrock,
                 model_kwargs={'max_gen_len':512})
     
